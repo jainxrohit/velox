@@ -69,6 +69,14 @@ function install_fast_float {
   cmake_install_dir fast_float -DBUILD_TESTS=OFF
 }
 
+# Only required for VELOX_ENABLE_NIMBLE=ON. Both the runtime library and the
+# flatc code generator are needed, since Nimble generates C++ headers from .fbs
+# schemas at build time.
+function install_flatbuffers {
+  wget_and_untar https://github.com/google/flatbuffers/archive/refs/tags/v"${FLATBUFFERS_VERSION}".tar.gz flatbuffers
+  cmake_install_dir flatbuffers -DFLATBUFFERS_BUILD_TESTS=OFF -DFLATBUFFERS_BUILD_FLATC=ON -DFLATBUFFERS_BUILD_SHAREDLIB=OFF
+}
+
 function install_wangle {
   wget_and_untar https://github.com/facebook/wangle/archive/refs/tags/"${FB_OS_VERSION}".tar.gz wangle
   cmake_install_dir wangle/wangle -DBUILD_TESTS=OFF

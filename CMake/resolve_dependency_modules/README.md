@@ -44,6 +44,9 @@ by Velox. See details on bundling below.
 | s2geometry        | 0.12.0          | Yes      ||
 | fast_float        | v8.0.2          | Yes      ||
 | xxhash            | default         | No       ||
+| flatbuffers       | 25.9.23         | Yes      | Only with `VELOX_ENABLE_NIMBLE=ON`. `flatc` is required, not just the runtime |
+| openzl            | 6b48fa48        | Yes      | Only with `VELOX_ENABLE_NIMBLE=ON`. Pinned to a commit; no suitable release tag |
+| fsst              | 50dd308b        | Yes      | Only with `VELOX_ENABLE_NIMBLE=ON`. Pinned to a commit; upstream has no releases |
 
 # Bundled Dependency Management
 This module provides a dependency management system that allows us to automatically fetch and build dependencies from source if needed.
