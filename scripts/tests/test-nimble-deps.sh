@@ -3,6 +3,14 @@
 #   ./test-nimble-deps.sh [path-to-velox-checkout]
 set -uo pipefail
 
+# This script checks out a different branch partway through, which would pull
+# the file out from under bash while it is still reading it. Re-exec from /tmp
+# so the running copy is independent of the working tree.
+if [[ "$0" != /tmp/* ]]; then
+  cp "$0" /tmp/.test-nimble-deps.running.sh
+  exec bash /tmp/.test-nimble-deps.running.sh "$@"
+fi
+
 VELOX="${1:-}"
 if [[ -z "$VELOX" ]]; then
   for c in "$HOME/velox" "$HOME/source/velox" "$HOME/src/velox" "$PWD"; do
@@ -17,6 +25,17 @@ VELOX="$(cd "$VELOX" && pwd)"
 
 echo "=============== ENVIRONMENT ==============="
 echo "velox checkout : $VELOX"
+missing=""
+command -v cmake >/dev/null || missing="$missing cmake"
+command -v "${CXX:-c++}" >/dev/null || missing="$missing ${CXX:-c++}"
+if [[ -n "$missing" ]]; then
+  echo
+  echo "FAIL: missing toolchain:$missing"
+  echo "Run scripts/tests/bootstrap-toolchain.sh first (installs a compiler,"
+  echo "ninja and CMake ${CMAKE_VERSION:-4.x}); that is enough for Test 1."
+  echo "Tests 2 and 3 additionally need scripts/setup-ubuntu.sh."
+  exit 1
+fi
 cmake --version | head -1
 ${CXX:-c++} --version | head -1
 echo "cores          : $(nproc)"
