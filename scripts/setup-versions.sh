@@ -48,6 +48,10 @@ S2GEOMETRY_VERSION="0.12.0"
 FAISS_VERSION="1.11.0"
 FAST_FLOAT_VERSION="v8.0.2"
 CCACHE_VERSION="4.11.3"
+# Only needed for VELOX_ENABLE_NIMBLE=ON. OpenZL and FSST have no system
+# packages and are always bundled, so their pins live in
+# CMake/resolve_dependency_modules/ instead.
+FLATBUFFERS_VERSION="25.9.23"
 
 # Adapter related versions.
 ABSEIL_VERSION="20240116.2"
