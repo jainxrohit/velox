@@ -26,7 +26,6 @@ target_link_libraries(
   nimble_tools_common
   nimble_common
   nimble_encodings
-  nimble_encodings_tests_utils
   nimble_tablet_common
   nimble_tablet_reader
   nimble_velox_reader
@@ -36,7 +35,17 @@ target_link_libraries(
   Folly::folly
 )
 
-add_library(nimble_dsl_lib NimbleDslLib.cpp)
+add_library(nimble_serializer_dump_lib SerializerDumpLib.cpp)
+target_link_libraries(
+  nimble_serializer_dump_lib
+  nimble_common
+  nimble_serialization_header
+  nimble_stream_data_parser
+  nimble_legacy
+  Folly::folly
+)
+
+add_library(nimble_dsl_lib NimbleDslLib.cpp NimbleDslVm.cpp)
 target_link_libraries(
   nimble_dsl_lib
   nimble_dump_lib
@@ -50,4 +59,15 @@ target_link_libraries(
   velox_memory
 )
 
-add_subdirectory(tests)
+# The command line front-ends for the two libraries above. EncodingBench and
+# EncodingSelectionLogger are developer instrumentation rather than shipped
+# tools and are deliberately left unbuilt.
+add_executable(nimble_dump NimbleDump.cpp)
+target_link_libraries(nimble_dump nimble_dump_lib Folly::folly)
+
+add_executable(nimble_dsl NimbleDsl.cpp)
+target_link_libraries(nimble_dsl nimble_dsl_lib Folly::folly)
+
+if(NIMBLE_BUILD_TESTING)
+  add_subdirectory(tests)
+endif()

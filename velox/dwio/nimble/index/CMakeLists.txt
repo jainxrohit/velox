@@ -18,6 +18,8 @@ add_library(
   ChunkStatsGroup.cpp
   ClusterIndex.cpp
   ClusterIndexFactory.cpp
+  ClusterIndexGroup.cpp
+  ClusterIndexReader.cpp
   ClusterIndexWriter.cpp
   DenseIndexFactory.cpp
   DenseIndexRegistry.cpp
@@ -58,4 +60,6 @@ target_link_libraries(
   Folly::folly
 )
 
-add_subdirectory(tests)
+if(NIMBLE_BUILD_TESTING)
+  add_subdirectory(tests)
+endif()

@@ -92,7 +92,9 @@ endif()
 
 # Ordered by dependency: common is the root, and the tablet, index and velox
 # layers reference each other's targets at declaration time.
-add_subdirectory(benchmarks)
+if(VELOX_ENABLE_BENCHMARKS)
+  add_subdirectory(benchmarks)
+endif()
 add_subdirectory(common)
 add_subdirectory(compression)
 add_subdirectory(encodings)
